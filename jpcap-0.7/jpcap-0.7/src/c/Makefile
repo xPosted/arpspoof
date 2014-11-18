@@ -12,12 +12,12 @@ PLATFORM = $(shell "uname")
 
 ifeq ($(PLATFORM), Linux)
     JNI_INCLUDE2 = $(JAVA_DIR)/include/linux
-    COMPILE_OPTION = -shared -L.
+    COMPILE_OPTION = -shared -L. -fPIC
     SUFFIX = .so
 else
 ifeq ($(PLATFORM), FreeBSD)
     JNI_INCLUDE2 = $(JAVA_DIR)/include/freebsd
-    COMPILE_OPTION = -shared -L.
+    COMPILE_OPTION = -shared -L. -fPIC
     SUFFIX = .so
 else
 ifeq ($(PLATFORM), SunOS)

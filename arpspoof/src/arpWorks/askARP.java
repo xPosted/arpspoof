@@ -18,18 +18,18 @@ public class askARP implements PacketReceiver {
 	public byte[] mac;
 	public JpcapCaptor capt;
 	
-	public byte[] ask(String ip,Integer dev) throws IOException{
+	public byte[] ask(String ip,NetworkInterface dev) throws IOException{
 		
 		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 		
-		 capt = JpcapCaptor.openDevice(devices[dev], 200, false, 200);
+		 capt = JpcapCaptor.openDevice(dev, 200, false, 200);
 		ARPPacket req = new ARPPacket();
 		req.hlen=6;
 		req.plen=4;
 		req.hardtype = ARPPacket.HARDTYPE_ETHER;
 		req.prototype = ARPPacket.PROTOTYPE_IP;
 		req.operation = ARPPacket.ARP_REQUEST;
-		req.sender_hardaddr=devices[dev].mac_address;
+		req.sender_hardaddr=dev.mac_address;
 		
 		
 		req.sender_protoaddr=InetAddress.getLocalHost().getAddress();
@@ -39,7 +39,7 @@ public class askARP implements PacketReceiver {
 	//	req.target_protoaddr=new byte[] {(byte)192,(byte)168,(byte)55,(byte)103};
 		EthernetPacket ether = new EthernetPacket();
 		ether.dst_mac=new byte[] {(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff};
-		ether.src_mac=devices[dev].mac_address;     //devices[dev].mac_address;
+		ether.src_mac=dev.mac_address;     //devices[dev].mac_address;
 		ether.frametype=EthernetPacket.ETHERTYPE_ARP;
 		req.datalink=ether;
 		
@@ -47,7 +47,7 @@ public class askARP implements PacketReceiver {
 		
 		
 	//	ipaddr=InetAddress.getByName(ip).getAddress();
-		JpcapSender sender =JpcapSender.openDevice(devices[dev]);
+		JpcapSender sender =JpcapSender.openDevice(dev);
 		sender.sendPacket(req);
 		capt.setFilter("arp src "+ip,true);
 	//	capt.setFilter("arp src 192.168.55.103",true);
