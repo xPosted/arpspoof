@@ -4,9 +4,9 @@ arpspoof
 This is JAVA tool for spoofing ARP responses in local networks. It use JPCAP library for interacting with network interface.
 
 REQUIREMENTS:
-	jdk/jre 
-	libpcap
-	jpcap
+	1 - jdk/jre 
+	2 - libpcap
+	3 - jpcap
 
 
 Install instructions:
