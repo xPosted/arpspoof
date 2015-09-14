@@ -39,6 +39,8 @@ public class ARPspoof {
 	public static  JpcapSender sender;
 	public static  	ARPPacket arp = new ARPPacket();
 	public static String targetIP=null;
+	public static String bcast=null;
+	
 	public static String usingIP=null;
 	public static String mac=null;
 	public static Integer msec=1000;							
@@ -71,11 +73,12 @@ public class ARPspoof {
 		 if (targetIP.equals("bcast")) {
 			  mac=new byte[] {(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff};
 			  for (NetworkInterfaceAddress nia : dev.addresses) {
+				  if (bcast!=null) targetIP = bcast; else 
 				   if (nia.broadcast!=null)
 					   targetIP=nia.broadcast.getHostAddress();
 			  }
 			  
-			   } else {
+		} else {
 			 mac = ask.ask(targetIP, dev);}
 		arp.hardtype = ARPPacket.HARDTYPE_ETHER;
         arp.prototype = ARPPacket.PROTOTYPE_IP;
@@ -139,6 +142,8 @@ public class ARPspoof {
 			 
 			 if (arg[i].equals("--dst")) { targetIP=arg[i+1]; i=i+2;; continue;}
 			 
+			 if (arg[i].equals("--bcast")) { bcast=arg[i+1]; i=i+2;; continue;}
+			 
 			 if (arg[i].equals("-s")^arg[i].equals("--spoof")) {usingIP=arg[i+1]; i=i+2; continue;}
 			 System.out.println("'"+arg[i]+"' unknown argument");  
 			 return false;
@@ -162,6 +167,9 @@ public class ARPspoof {
 		 System.out.println();
 		 System.out.println("      --dst	<ip> [ip that will receive spoofed packets]");
 		 System.out.println("		[--dst bcast]  make spoofed packets broadcasting");
+		 
+		 System.out.println();
+		 System.out.println("      --bcast	<ip> [set custom broadcast ip, only if '--dst bcast' is set]");
 		 
 		 System.out.println();
 		 System.out.println("-s  --spoof	<ip> [ip that will be using for spoofing, most of all it is GATEWAY or DNS server] ");
